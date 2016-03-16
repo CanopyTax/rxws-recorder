@@ -1,6 +1,3 @@
-// We need to be careful about memory leaks here.
-let requestMap = {};
-
 window.rxwsHistory = window.rh = [];
 window.rxwsHistory.isRecording = false;
 window.rxwsHistory.startRecording = startRecording;
@@ -16,13 +13,7 @@ export function startRecording(rxws) {
 		throw new Error(`Must provide rxws object, to apply middleware to`)
 	}
 
-	requestMap = {};
-
 	window.rxwsHistory.isRecording = true;
-
-	rxws
-	.requestUse()
-	.subscribe(newRequestOk, newRequestErr);
 
 	rxws
 	.use()
@@ -38,36 +29,20 @@ export function setMaxRequestsRecorded(max) {
 }
 
 export function clear() {
-	requestMap = {};
 	// we don't re-assign the variable because it's got some properties on it that we want.
 	window.rxwsHistory.splice(0, window.rxwsHistory.length);
 }
 
-function newRequestOk({req, send, reply, next}) {
-	if (window.rxwsHistory.isRecording) {
-		requestMap[req.header.correlationId] = req;
-	}
+function handleSuccessfulRequest({req, res, reply, retry, next}) {
+	recordRequestResponse(req, res);
 	next();
 }
 
-function newRequestErr(err) {
-	// rxws never calls this anyways, so nothing to do.
+function handleFailedRequest({req, err}) {
+	recordRequestResponse(req, err);
 }
 
-function handleSuccessfulRequest({res, reply, retry, next}) {
-	recordRequestResponse(res.header.correlationId, res);
-	next();
-}
-
-function handleFailedRequest(error, request) {
-	const correlationId = request && request.header ? request.header.correlationId : null;
-	recordRequestResponse(correlationId, error, request);
-}
-
-function recordRequestResponse(correlationId, response, req) {
-	const request = req || requestMap[correlationId];
-	delete requestMap[correlationId];
-
+function recordRequestResponse(request, response) {
 	const statusCode = response && response.header && response.header.statusCode ? response.header.statusCode : 'ERROR_NO_STATUS_CODE';
 	const resource = request && request.header ? request.header.resource : 'UNKNOWN_RESOURCE';
 
