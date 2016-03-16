@@ -29,6 +29,9 @@ An array of request/response objects, ordered from most recent to least recent. 
 }
 ```
 
+####window.rh.mostRecent
+Mostly equivalent to doing `rh[0]`, but it handles not having any requests at all.
+
 ####window.rh.isRecording
 A boolean value that indicates whether rxws-recorder is recording all the request/responses. Instead of changing this value directly, you should call `window.rh.startRecording` or `window.rh.stopRecording`. Otherwise things will not work.
 
