@@ -58,6 +58,7 @@ See the global equivalent above.
 
 ####setMaxRequestsRecorded(max)
 Call this only after you have called `startRecording`.
+
 **Parameters**
 - max: a positive integer that represents the maximum number of requests that will be in memory at any time.
 
