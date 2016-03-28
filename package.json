@@ -1,6 +1,6 @@
 {
   "name": "rxws-recorder",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "rxws middleware to help read websocket requests and responses.",
   "main": "lib/rxws-recorder.js",
   "scripts": {
