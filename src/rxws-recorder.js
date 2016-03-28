@@ -53,11 +53,16 @@ function recordRequestResponse(request, response) {
 			window.rxwsHistory.splice(deleteStart, window.rxwsHistory.length - deleteStart)
 		}
 
-		window.rxwsHistory.unshift({
-			resource,
-			request,
-			response,
-			statusCode,
-		});
+		try {
+			window.rxwsHistory.unshift(JSON.parse(JSON.stringify({
+				resource,
+				request,
+				response,
+				statusCode,
+			})));
+		} catch (ex) {
+			console.error(`Could not add web socket event to rxws-recorder history. Error was`);
+			console.error(ex);
+		}
 	}
 }
