@@ -1,4 +1,4 @@
-const window = typeof window !== 'undefined' ? window : global;
+const window = typeof window !== 'undefined' ? window : (typeof global !== 'undefined' ? global : self);
 
 window.rxwsHistory = window.rh = [];
 window.rxwsHistory.isRecording = false;
