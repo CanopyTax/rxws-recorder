@@ -1,3 +1,5 @@
+const window = typeof window !== 'undefined' ? window : global;
+
 window.rxwsHistory = window.rh = [];
 window.rxwsHistory.isRecording = false;
 window.rxwsHistory.startRecording = startRecording;
